@@ -1,0 +1,9 @@
+{
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3308,
+    "username": "root",
+    "password": "momo123",
+    "database": "tyoeorm_test"
+  }
+}
