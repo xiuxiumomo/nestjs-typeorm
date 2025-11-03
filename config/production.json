@@ -5,5 +5,8 @@
     "username": "root",
     "password": "momo123",
     "database": "tyoeorm_test"
+  },
+  "logs": {
+    "dir": "/mnt/logs"
   }
 }

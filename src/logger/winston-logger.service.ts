@@ -4,17 +4,18 @@ import "winston-daily-rotate-file";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-
+import config from "config";
 dayjs.extend(utc);
 dayjs.extend(timezone);
-
+//日志目录
+const { dir } = config.get("logs");
 @Injectable()
 export class WinstonLogger implements LoggerService {
   private logger: winston.Logger;
 
   constructor() {
     const transport = new winston.transports.DailyRotateFile({
-      filename: "logs/app-%DATE%.log",
+      filename: `${dir}/app-%DATE%.log`,
       datePattern: "YYYY-MM-DD",
       zippedArchive: true,
       maxSize: "20m",
