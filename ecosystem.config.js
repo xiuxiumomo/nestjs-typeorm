@@ -9,6 +9,7 @@ module.exports = {
       max_memory_restart: "500M", // 内存超限重启
       env: {
         NODE_ENV: "production",
+        PORT: 3888,
       },
     },
   ],
