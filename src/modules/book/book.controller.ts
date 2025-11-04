@@ -14,6 +14,10 @@ export class BookController {
   findAll() {
     return this.bookService.findAll();
   }
+  @Post("first")
+  fineFirst() {
+    return this.bookService.findFirst();
+  }
   @Get("detail")
   findOne(@Query("id") id: string) {
     return this.bookService.findOne(+id);

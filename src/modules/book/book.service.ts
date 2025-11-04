@@ -1,16 +1,19 @@
 import { Injectable } from "@nestjs/common";
-//book表
+//book 表
 import { Book } from "./entities/book.entity";
-//book添加数据的约束
+//book 添加数据的约束
 import { CreateBookDto } from "./dto/create-book.dto";
 import { UpdateBookDto } from "./dto/update-book.dto";
-
-// typeorm
+//typeorm
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+//redis采用公共模块
+import { RedisService } from "@/common/redis/redis.service";
+import { bookRedis } from "@/utils/redis-key.utils";
 @Injectable()
 export class BookService {
   constructor(
+    private readonly redisService: RedisService,
     @InjectRepository(Book)
     private readonly bookRepository: Repository<Book>
   ) {}
@@ -32,7 +35,22 @@ export class BookService {
   async findAll() {
     try {
       const res = await this.bookRepository.createQueryBuilder("book").getMany();
-      console.log(res, "res");
+      return res;
+    } catch (e) {
+      throw new Error(`请求出错-${e}`);
+    }
+  }
+  async findFirst() {
+    const { key: cacheKey, ttl } = bookRedis();
+    try {
+      const cached = await this.redisService.get(cacheKey);
+      console.log(cached, "是否有缓存数据");
+      if (cached) {
+        return cached;
+      }
+      const res = await this.bookRepository.createQueryBuilder("book").take(15).getMany();
+      console.log(res, "数据库数据");
+      await this.redisService.set(cacheKey, res, ttl);
       return res;
     } catch (e) {
       throw new Error(`请求出错-${e}`);
@@ -40,7 +58,6 @@ export class BookService {
   }
 
   async findOne(id: number) {
-    console.log(id, "当前id");
     if (!id) return Promise.reject("id不能为空");
     try {
       const res = await this.bookRepository
