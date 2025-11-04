@@ -7,7 +7,7 @@ import { RedisModule } from "@nestjs-modules/ioredis";
 import config from "config";
 const { host, port, username, password, database } = config.get("mysql");
 
-const { host: rhost, port: rport, password: rpassword, db: rdb } = config.get("redis");
+const { host: rhost, port: rport, password: rpassword } = config.get("redis");
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -33,7 +33,6 @@ const { host: rhost, port: rport, password: rpassword, db: rdb } = config.get("r
       url: `redis://${rhost}:${rport}`,
       options: {
         password: rpassword,
-        db: rdb,
       },
     }),
     BookModule,
