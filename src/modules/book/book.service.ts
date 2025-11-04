@@ -29,8 +29,14 @@ export class BookService {
     }
   }
 
-  findAll() {
-    return `This action returns all book`;
+  async findAll() {
+    try {
+      const res = await this.bookRepository.createQueryBuilder("book").getMany();
+      console.log(res, "res");
+      return res;
+    } catch (e) {
+      throw new Error(`请求出错-${e}`);
+    }
   }
 
   async findOne(id: number) {

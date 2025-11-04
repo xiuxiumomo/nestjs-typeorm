@@ -15,6 +15,9 @@ const { host, port, username, password, database } = config.get("mysql");
       // Ensure the glob has a path separator so compiled JS files are matched (dist/...)
       entities: [__dirname + "/**/*.entity{.ts,.js}"],
       synchronize: true,
+      connectTimeout: 60000,
+      acquireTimeout: 60000,
+
       // alternatively, you can use `autoLoadEntities: true` and register entities via forFeature
       // autoLoadEntities: true,
     }),
